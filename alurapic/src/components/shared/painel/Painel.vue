@@ -36,6 +36,10 @@ export default {
     text-align: center;
   }
 
+  .painel-conteudo {
+    overflow: hidden;
+  }
+
   .painel .painel-titulo {
     text-align: center;
     border: solid 2px;
