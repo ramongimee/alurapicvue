@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1 class="centralizado">{{ titulo }}</h1>
+    <p v-show="mensagem" class="centralizado">{{ mensagem }}</p>
     <input
       type="search"
       class="filtro"
@@ -27,6 +28,7 @@
 import Painel from "../shared/painel/Painel.vue";
 import ImagemResponsiva from "../shared/imagem-responsiva/ImagemResponsiva.vue";
 import Botao from "../shared/botao/Botao.vue";
+import FotoService from '../../domain/foto/FotoService';
 
 export default {
   components: {
@@ -37,17 +39,17 @@ export default {
 
   data() {
     return {
-      titulo: "Alurapic",
+      titulo: 'Alurapic',
       fotos: [],
-      filtro: ""
+      filtro: '',
+      mensagem: ''
     };
   },
 
   computed: {
     fotosComFiltro() {
       if (this.filtro) {
-        /* filtrar */
-        let exp = new RegExp(this.filtro.trim(), "i");
+        let exp = new RegExp(this.filtro.trim(), 'i');
         return this.fotos.filter(foto => exp.test(foto.titulo));
       } else {
         return this.fotos;
@@ -57,14 +59,26 @@ export default {
 
   methods: {
     remove(foto) {
-      alert("remover a foto " + foto.titulo);
+      this.service
+        .apaga(foto._id)
+        .then(() => {
+          let indice = this.fotos.indexOf(foto); //Acha a posição da foto na lista
+          this.fotos.splice(indice, 1); //A instrução altera o array
+          this.mensagem = 'Foto removida com sucesso'
+        },
+        err =>{
+          this.mensagem = 'Não foi possível remover a foto';
+          console.log(err);
+        })
     }
   },
 
   created() {
-    this.$http
-      .get("http://localhost:3000/v1/fotos")
-      .then(response => response.json())
+
+    this.service = new FotoService(this.$resource);
+
+    this.service
+      .lista()
       .then(fotos => (this.fotos = fotos), err => console.log(err));
   }
 };

@@ -13,6 +13,10 @@ const router = new VuewRouter({
   mode: 'history'
 });
 
+//Http usará sempre o endereço abaixo
+
+Vue.http.options.root = 'http://localhost:3000';
+
 new Vue({
   el: '#app',
   router,
