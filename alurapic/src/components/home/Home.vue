@@ -12,6 +12,13 @@
       <li class="lista-fotos-item" v-for="foto in fotosComFiltro" :key="foto.id">
         <meu-painel :titulo="foto.titulo">
           <imagem-responsiva :url="foto.url" :titulo="foto.titulo" v-meu-transform="{incremento: 15, animate:true}"></imagem-responsiva>
+
+          <router-link :to="{ name: 'cadastro', params: {id : foto._id}}">
+            <meu-botao
+              rotulo="Alterar"
+              tipo="button" />
+          <router-link>
+
           <meu-botao 
             tipo="button" 
             rotulo="REMOVER" 
@@ -67,8 +74,7 @@ export default {
           this.mensagem = 'Foto removida com sucesso'
         },
         err =>{
-          this.mensagem = 'Não foi possível remover a foto';
-          console.log(err);
+          this.mensagem = err.message;
         })
     }
   },
@@ -79,7 +85,7 @@ export default {
 
     this.service
       .lista()
-      .then(fotos => (this.fotos = fotos), err => console.log(err));
+      .then(fotos => (this.fotos = fotos), err => this.mensagem = err.message);
   }
 };
 </script>
