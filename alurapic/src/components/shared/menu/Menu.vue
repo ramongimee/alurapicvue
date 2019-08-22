@@ -1,24 +1,28 @@
 <template>
-  <nav>
-    <ul>
-      <li v-for="rota of rotas " :key="rota.path">
-        <router-link :to="rota.path ? rota.path : '/'">{{rota.titulo}}</router-link>
-      </li>
-    </ul>
-  </nav>
+    <nav>
+      <ul>       
+          <li v-for="rota in rotas">
+            <router-link :to="rota.path ? rota.path : '/'">
+              {{ rota.titulo }}
+            </router-link>
+          </li>
+      </ul>
+    </nav>
 </template>
 
-
 <script>
+
 export default {
 
-    props:{
-        rotas:{
+    props: {
+
+        rotas: {
             type: Array,
-            required:true
+            required: true
         }
     }
-};
+}
+
 </script>
 
 <style>
